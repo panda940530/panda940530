@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>隨機運動的球</title>
+
+    <!-- 引入 Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 隨機運動的球區域 -->
+    <div class="container mt-5">
+        <h1>隨機運動的球</h1>
+        <p>球會隨機運動，碰到邊界會以相反的方向行進。</p>
+
+        <!-- 畫布區域 -->
+        <canvas id="ballCanvas" width="800" height="400" style="border: 1px solid #000;"></canvas>
+    </div>
+
+    <!-- 引入 Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript 用於隨機運動的球 -->
+    <script>
+        var canvas = document.getElementById('ballCanvas');
+        var context = canvas.getContext('2d');
+        var ball = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            radius: 20,
+            dx: (Math.random() - 0.5) * 4, // 隨機水平速度
+            dy: (Math.random() - 0.5) * 4, // 隨機垂直速度
+        };
+
+        // 更新球的位置
+        function updateBallPosition() {
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+
+            // 碰到邊界時反彈
+            if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+                ball.dx *= -1;
+            }
+
+            if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
+                ball.dy *= -1;
+            }
+        }
+
+        // 渲染球
+        function drawBall() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.beginPath();
+            context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            context.fillStyle = '#FF5733'; // 球的顏色
+            context.fill();
+            context.closePath();
+        }
+
+        // 周期性更新和渲染球的函數
+        function animate() {
+            updateBallPosition();
+            drawBall();
+            requestAnimationFrame(animate);
+        }
+
+        // 開始動畫
+        animate();
+    </script>
+</body>
+</html>
